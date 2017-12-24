@@ -1,4 +1,4 @@
-## zhihu_sexy_girls
+# zhihu_sexy_girls
 
 我的第三个爬虫项目: Scrapy + MySQL + 倒立验证码识别 爬取知乎上的小姐姐们的照片
 
