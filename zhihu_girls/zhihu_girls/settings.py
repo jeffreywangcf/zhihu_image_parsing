@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import os
 # Scrapy settings for zhihu_girls project
 #
 # For simplicity, this file contains only settings considered important or
@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'zhihu_girls.spiders'
 #USER_AGENT = 'zhihu_girls (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False      #默认是True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -33,7 +33,7 @@ ROBOTSTXT_OBEY = True
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = True
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -47,7 +47,7 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'zhihu_girls.middlewares.ZhihuGirlsSpiderMiddleware': 543,
+#    'zhihu_girls.middlewares.ScrapyDemoSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
@@ -64,10 +64,14 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'zhihu_girls.pipelines.ZhihuGirlsPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    #'zhihu_girls.pipelines.ScrapyDemoPipeline': 3,
+    'scrapy.pipelines.images.ImagesPipeline': 2,
+    'zhihu_girls.pipelines.MysqlTwistedPipline': 1
+}
 
+IMAGES_URLS_FIELD = "img_url"
+IMAGES_STORE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/GirlImages"
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
@@ -88,3 +92,7 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+MYSQL_DBNAME = 'demo'
+MYSQL_CHARSET = "utf8"

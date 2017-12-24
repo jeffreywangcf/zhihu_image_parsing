@@ -9,6 +9,7 @@ import scrapy
 
 
 class ZhihuGirlsItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    img_url = scrapy.Field()
+    belongs_question_url = scrapy.Field()
+    author = scrapy.Field()
+    text = scrapy.Field()
