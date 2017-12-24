@@ -26,7 +26,7 @@ class ZhihuSpider(scrapy.Spider):
         all_urls = response.css(".zm-item > div > div > link::attr(href)").extract()
         next_page_selector = response.css(".zm-invite-pager > span:last-child > a::attr(href)")
         for question_url in list(map(lambda x: request.urljoin("https://www.zhihu.com/", x), all_urls)):
-            yield scrapy.Request(question_url, callback=self.parse_detail, headers=self.header)
+            yield scrapy.Request(question_url, callback=self.parse_detail, headers=self.header, dont_filter=True)
         if next_page_selector:
             next_url = request.urljoin(self.start_urls[0], next_page_selector.extract()[0])
             yield scrapy.Request(next_url, callback=self.parse, headers=self.header, dont_filter=True)
@@ -78,15 +78,16 @@ class ZhihuSpider(scrapy.Spider):
             assert captcha_version in valid_captcha_version
             if captcha_version == valid_captcha_version[0]:
                 yield scrapy.Request(image_captcha_url, headers=self.header,
-                                     callback=self.image_captcha_handling, meta={"post_data": post_data, "post_url": post_url})
+                                     callback=self.image_captcha_handling, meta={"post_data": post_data, "post_url": post_url}, dont_filter=True)
             else:
                 yield scrapy.Request(text_captcha_url , headers=self.header,
-                                     callback=self.text_captcha_handling, meta={"post_data": post_data, "post_url": post_url})
+                                     callback=self.text_captcha_handling, meta={"post_data": post_data, "post_url": post_url}, dont_filter=True)
             return [scrapy.FormRequest(
                 url=post_url,
                 formdata=post_data,
                 headers=self.header,
-                callback=self.check_login
+                callback=self.check_login,
+                dont_filter=True
             )]
         raise ValueError("xsrf value not found")
 
@@ -148,5 +149,6 @@ class ZhihuSpider(scrapy.Spider):
             url=post_url,
             formdata=post_data,
             headers=self.header,
-            callback=self.check_login
+            callback=self.check_login,
+            dont_filter=True
         )]
