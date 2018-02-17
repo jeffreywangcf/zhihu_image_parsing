@@ -4,6 +4,16 @@
 
 crawl project 3: (Scrapy + MySQL + catpcha recognition) -> sexy_girls.jpg
 
+### 更新日志 log
+
+|日期|更新内容|
+|:-:|:-:|
+|1/30/2018|最新版知乎模拟登录（2018年初）|
+
+|date|update|
+|:-:|:-:|
+|1/20/2018|up-to-date (2018-) Zhihu logging|
+
 ### 写在前面 notice
 此爬虫适用于爬取任意知乎收藏夹。可以对[zhihu.py](https://github.com/JeffreyWang2864/zhihu_sexy_girls/blob/master/zhihu_girls/zhihu_girls/spiders/zhihu.py)里的`start_urls`进行修改。
 
