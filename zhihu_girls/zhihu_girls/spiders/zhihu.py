@@ -9,6 +9,7 @@ from PIL import Image
 from zheye import zheye
 from scrapy.loader import ItemLoader
 from zhihu_girls.items import ZhihuGirlsItem
+import jslog
 
 chrome_user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14"
 
@@ -21,6 +22,8 @@ class ZhihuSpider(scrapy.Spider):
         "Referer": "https://www.zhihu.com",
         "User-Agent": chrome_user_agent
     }
+
+    real_passwd = None
 
     def parse(self, response):
         all_urls = response.css(".zm-item > div > div > link::attr(href)").extract()
@@ -57,31 +60,35 @@ class ZhihuSpider(scrapy.Spider):
 
     def login(self, response):
         response_text = response.text
-        match_obj = re.match('.*name="_xsrf" value="(.*?)"', response_text, re.DOTALL)
-        if match_obj:
+        #&quot;xsrf&quot;:&quot;7a7b743f-881d-4c8b-84aa-b4142a944a64&quot
+        #match_obj = re.match('.*name="_xsrf" value="(.*?)"', response_text, re.DOTALL)
+        #if match_obj:
+        if True:
             session = requests.session()
-            xsrf_text = self.get_xsrf(session)
-            post_url = "https://www.zhihu.com/login/phone_num"
+            #xsrf_text = self.get_xsrf(session)
+            post_url = "https://www.zhihu.com/api/v3/oauth/sign_in"
             with open("/Users/Excited/zhihuaccount.txt", "r") as file:
                 lines = file.readlines()
-            post_data = {
-                "_xsrf": xsrf_text,
-                "phone_num": lines[0].rstrip(),
-                "password": lines[1].rstrip(),
-                "captcha": ""
-            }
+            self.real_passwd = lines[1].rstrip()
+            # post_data = {
+            #     "_xsrf": xsrf_text,
+            #     "phone_num": lines[0].rstrip(),
+            #     "password": "000000",
+            #     "captcha": ""
+            # }
+            post_data = jslog.login(lines[0].rstrip(), self.real_passwd)
             label = str(int(time.time() * 1000))
             image_captcha_url = "https://www.zhihu.com/captcha.gif?r={0}&type=login".format(label)
             text_captcha_url = "https://www.zhihu.com/captcha.gif?r={0}&type=login&lang=cn".format(label)
             captcha_version = "text"
             valid_captcha_version = ("image", "text")
             assert captcha_version in valid_captcha_version
-            if captcha_version == valid_captcha_version[0]:
-                yield scrapy.Request(image_captcha_url, headers=self.header,
-                                     callback=self.image_captcha_handling, meta={"post_data": post_data, "post_url": post_url}, dont_filter=True)
-            else:
-                yield scrapy.Request(text_captcha_url , headers=self.header,
-                                     callback=self.text_captcha_handling, meta={"post_data": post_data, "post_url": post_url}, dont_filter=True)
+            #if captcha_version == valid_captcha_version[0]:
+                #yield scrapy.Request(image_captcha_url, headers=self.header,
+                                     #callback=self.image_captcha_handling, meta={"post_data": post_data, "post_url": post_url}, dont_filter=True)
+            #else:
+                #yield scrapy.Request(text_captcha_url , headers=self.header,
+                                     #callback=self.text_captcha_handling, meta={"post_data": post_data, "post_url": post_url}, dont_filter=True)
             return [scrapy.FormRequest(
                 url=post_url,
                 formdata=post_data,
