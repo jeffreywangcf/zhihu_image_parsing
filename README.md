@@ -6,6 +6,8 @@ crawl project 3: (Scrapy + MySQL + catpcha recognition) -> sexy_girls.jpg
 
 ### 更新日志 log
 
+最近发现知乎又双叒叕更新了。。这两天对这个repo模拟登录部分进行更新。
+
 |日期|更新内容|
 |:-:|:-:|
 |1/30/2018|最新版知乎模拟登录（2018年初）|
