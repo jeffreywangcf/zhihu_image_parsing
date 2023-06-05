@@ -2,7 +2,7 @@
 
 我的第三个爬虫项目: Scrapy + MySQL + 倒立验证码识别 爬取知乎上的小姐姐们的照片
 
-crawl project 3: (Scrapy + MySQL + catpcha recognition) -> sexy_girls.jpg
+crawl project 3: (Scrapy + MySQL + catpcha recognition) -> images from posts
 
 ### 更新日志 log
 
